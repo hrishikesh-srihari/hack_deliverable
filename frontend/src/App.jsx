@@ -1,6 +1,28 @@
 import "./App.css";
+import { useEffect, useState } from "react";
 
 function App() {
+	const [quotes, setQuotes] = useState([]);
+
+	useEffect(() => {
+		const fetchQuotes = async () => {
+		try {
+			const response = await fetch('/api/quotes');
+			if (response.ok) {
+			const data = await response.json();
+			setQuotes(data);
+			} else {
+			console.error('Error fetching quotes:', response.status);
+			}
+		} catch (error) {
+			console.error('Error fetching quotes:', error);
+		}
+		};
+
+		fetchQuotes();
+	}, []);
+
+
 	return (
 		<div className="App">
 			{/* TODO: include an icon for the quote book */}
@@ -18,10 +40,16 @@ function App() {
 
 			<h2>Previous Quotes</h2>
 			{/* TODO: Display the actual quotes from the database */}
-			<div className="messages">
-				<p>Peter Anteater</p>
-				<p>Zot Zot Zot!</p>
-				<p>Every day</p>
+			<div className="quotes">
+			<ul>
+				{quotes.map((quote, index) => (
+					<li key={index}>
+					<p>Name: {quote.name}</p>
+					<p>Message: {quote.message}</p>
+					<p>Time: {quote.time}</p>
+					</li>
+				))}
+			</ul>
 			</div>
 		</div>
 	);
