@@ -1,7 +1,6 @@
 import "./App.css";
 import '@radix-ui/themes/styles.css';
-import { Table, Heading, Button, ScrollArea, Select, Em } from '@radix-ui/themes';
-import * as Form from '@radix-ui/react-form';
+import { Table, Heading, Button, ScrollArea, Em, TextField } from '@radix-ui/themes';
 
 
 import { useEffect, useState } from "react";
@@ -12,6 +11,7 @@ function App() {
   const [message, setMessage] = useState('');
   const [maxQuoteAge, setMaxQuoteAge] = useState(null);
   const [sortOrder, setSortOrder] = useState('asc');
+  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     const fetchQuotes = async () => {
@@ -33,7 +33,34 @@ function App() {
 	};
 
     fetchQuotes();
-  }, [maxQuoteAge]);
+  }, [maxQuoteAge, searchText]);
+
+
+
+  useEffect(() => {
+    const filterQuotes = () => {
+      if (!searchText) {
+        return quotes;
+      }
+      return quotes.filter(
+        (quote) =>
+          quote.name.toLowerCase().includes(searchText.toLowerCase()) ||
+          quote.message.toLowerCase().includes(searchText.toLowerCase())
+      );
+    };
+
+    const filteredQuotes = filterQuotes();
+    filteredQuotes.sort((a, b) => {
+      if (a.name < b.name) return sortOrder === 'asc' ? -1 : 1;
+      if (a.name > b.name) return sortOrder === 'asc' ? 1 : -1;
+      if (a.message < b.message) return sortOrder === 'asc' ? -1 : 1;
+      if (a.message > b.message) return sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
+    setQuotes(filteredQuotes);
+  }, [searchText, sortOrder, quotes]);
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,7 +117,16 @@ function App() {
 
 				<Button className="submit-button" type="submit" variant="soft">Submit</Button>
 			</form>
+
+			<div className="search-quotes">
+				<TextField.Root
+					placeholder="Search quotes..."
+					value={searchText}
+					onChange={(e) => setSearchText(e.target.value)}
+				/>
+			</div>
 		</div>
+		
 
 		<div className="input-label">
 			<label htmlFor="input-max-age">Max Quote Age (days)</label>
