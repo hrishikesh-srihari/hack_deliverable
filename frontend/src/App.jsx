@@ -1,6 +1,9 @@
 import "./App.css";
 import '@radix-ui/themes/styles.css';
-import { Table, Heading } from '@radix-ui/themes';
+import { Table, Heading, Button, ScrollArea, Select, Em } from '@radix-ui/themes';
+import * as Form from '@radix-ui/react-form';
+
+
 import { useEffect, useState } from "react";
 
 function App() {
@@ -57,80 +60,88 @@ function App() {
     }
   };
 
+
+
   return (
     <div className="App">
-		<h1>Hack at UCI Tech Deliverable</h1>
+		<Heading className="heading-div" as="h1">Hack at UCI Tech Deliverable</Heading>
+		<div className="submission-form">
+			<form onSubmit={handleSubmit}>
+				<label htmlFor="input-name">Name</label>
+				<input
+				type="text"
+				name="name"
+				id="input-name"
+				required
+				value={name}
+				onChange={(e) => setName(e.target.value)}
+				/>
 
-		<form onSubmit={handleSubmit}>
-			<label htmlFor="input-name">Name</label>
+				<label htmlFor="input-message">Quote</label>
+
+				<input
+				type="text"
+				name="message"
+				id="input-message"
+				required
+				value={message}
+				onChange={(e) => setMessage(e.target.value)}
+				/>
+
+				<Button className="submit-button" type="submit" variant="soft">Submit</Button>
+			</form>
+		</div>
+
+		<div className="input-label">
+			<label htmlFor="input-max-age">Max Quote Age (days)</label>
+
 			<input
-			type="text"
-			name="name"
-			id="input-name"
-			required
-			value={name}
-			onChange={(e) => setName(e.target.value)}
+			type="number"
+			name="max-age"
+			id="input-max-age"
+			value={maxQuoteAge || ''}
+			onChange={(e) => setMaxQuoteAge(e.target.value ? parseInt(e.target.value) : null)}
 			/>
-
-			<label htmlFor="input-message">Quote</label>
-
-			<input
-			type="text"
-			name="message"
-			id="input-message"
-			required
-			value={message}
-			onChange={(e) => setMessage(e.target.value)}
-			/>
-
-			<button type="submit">Submit</button>
-		</form>
-
-		<label htmlFor="input-max-age">Max Quote Age (days)</label>
-		<input
-		type="number"
-		name="max-age"
-		id="input-max-age"
-		value={maxQuoteAge || ''}
-		onChange={(e) => setMaxQuoteAge(e.target.value ? parseInt(e.target.value) : null)}
-		/>
+		</div>
 
 		
 
 		<div className="heading-div">
-			<Heading as="h2"> Previous Quotes</Heading>
-			<button onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
+			<Heading as="h2"> <Em>Previous Quotes</Em></Heading>
+			<Button variant="soft" onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
 				Sort {sortOrder === 'asc' ? 'Descending Name' : 'Ascending Name'}
-			</button>
+			</Button>
 		</div>
 		
 		<div className="quotes">
-		<Table.Root size="3">
-			<Table.Header>
-				<Table.Row>
-					<Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
-					<Table.ColumnHeaderCell>Quote</Table.ColumnHeaderCell>
-					<Table.ColumnHeaderCell>Time</Table.ColumnHeaderCell>
-				</Table.Row>
-			</Table.Header>
-			<Table.Body>
-				{quotes
-					.sort((a, b) => {
-						if (a.name < b.name) return sortOrder === 'asc' ? -1 : 1;
-						if (a.name > b.name) return sortOrder === 'asc' ? 1 : -1;
-						if (a.message < b.message) return sortOrder === 'asc' ? -1 : 1;
-						if (a.message > b.message) return sortOrder === 'asc' ? 1 : -1;
-						return 0;
-					})
-					.map((quote, index) => (
-						<Table.Row key={index}>
-						<Table.RowHeaderCell>{quote.name}</Table.RowHeaderCell>
-						<Table.Cell>{quote.message}</Table.Cell>
-						<Table.Cell>{quote.time}</Table.Cell>
+			<ScrollArea type="always" scrollbars="vertical" style={{ height: 500 }}>
+				<Table.Root size="3">
+					<Table.Header>
+						<Table.Row>
+							<Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
+							<Table.ColumnHeaderCell>Quote</Table.ColumnHeaderCell>
+							<Table.ColumnHeaderCell>Time</Table.ColumnHeaderCell>
 						</Table.Row>
-				))}
-			</Table.Body>
-		</Table.Root>
+					</Table.Header>
+					<Table.Body>
+						{quotes
+							.sort((a, b) => {
+								if (a.name < b.name) return sortOrder === 'asc' ? -1 : 1;
+								if (a.name > b.name) return sortOrder === 'asc' ? 1 : -1;
+								if (a.message < b.message) return sortOrder === 'asc' ? -1 : 1;
+								if (a.message > b.message) return sortOrder === 'asc' ? 1 : -1;
+								return 0;
+							})
+							.map((quote, index) => (
+								<Table.Row key={index}>
+								<Table.RowHeaderCell>{quote.name}</Table.RowHeaderCell>
+								<Table.Cell>{quote.message}</Table.Cell>
+								<Table.Cell>{quote.time}</Table.Cell>
+								</Table.Row>
+						))}
+					</Table.Body>
+				</Table.Root>
+			</ScrollArea>
 		</div>
 	</div>
 	);

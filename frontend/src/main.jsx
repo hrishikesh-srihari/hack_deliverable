@@ -7,7 +7,12 @@ import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
-		<Theme>
+		<Theme 
+			accentColor="indigo"
+  			grayColor="slate"
+			panelBackground="solid"
+			scaling="100%"
+		>
 			<App />
 		</Theme>
 	</React.StrictMode>

@@ -7,6 +7,8 @@
 	margin-left: auto;
   	margin-right: auto;
 	padding-top: 100px;
+	margin-bottom: 0px;
+	
 }
 
 .quotes {
@@ -14,4 +16,28 @@
 	margin-left: auto;
   	margin-right: auto;
 	padding-top: 100px;
+}
+
+.submit-button {
+	padding-left: 10px;
+}
+
+.submission-form {
+	gap: 5px;
+	max-width: fit-content;
+	margin-left: auto;
+  	margin-right: auto;
+	padding-top: 100px;
+}
+
+.input-label {
+	max-width: fit-content;
+	margin-left: auto;
+  	margin-right: auto;
+	padding-top: 100px;
+
+}
+
+form {
+	padding: 10px;
 }
