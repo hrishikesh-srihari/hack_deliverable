@@ -12,6 +12,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   			grayColor="slate"
 			panelBackground="solid"
 			scaling="100%"
+			appearance="dark"
 		>
 			<App />
 		</Theme>

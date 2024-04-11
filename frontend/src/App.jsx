@@ -1,6 +1,9 @@
 import "./App.css";
 import '@radix-ui/themes/styles.css';
-import { Table, Heading, Button, ScrollArea, Em, TextField } from '@radix-ui/themes';
+import { Table, Heading, Button, Tooltip, ScrollArea, Em, TextField} from '@radix-ui/themes';
+import { motion } from "framer-motion"
+import { FaLinkedin, FaInstagram} from "react-icons/fa";
+import { FiGithub } from "react-icons/fi";
 
 
 
@@ -16,6 +19,7 @@ function App() {
 	const [sortOrder, setSortOrder] = useState('asc');
 	const [searchText, setSearchText] = useState('');
 	const [timeZone, setTimeZone] = useState('UTC');
+	const headerTitle = "Hack at UCI Tech Deliverable".split(" ");
 
 
 	const updateTableDates = (timeZone) => {
@@ -111,7 +115,21 @@ function App() {
 
 	return (
 		<div className="App">
-			<Heading className="heading-div" as="h1">Hack at UCI Tech Deliverable</Heading>
+			<div className="social-buttons">
+				<Button color="amber" variant="soft"> <FiGithub /> Github </Button>
+				<Button color="amber" variant="soft"> <FaLinkedin /> LinkedIn </Button>
+				<Button color="amber" variant="soft"> <FaInstagram /> Instagram </Button>
+			</div>
+
+			<div className="header-image">
+				<img 
+					src="/Quotebook.png"
+					width={75}
+				/>
+			</div>
+
+			<Heading className="heading-div" size="7" color="indigo" as="h1">Hack at UCI Tech Deliverable</Heading>
+
 			<div className="submission-form">
 				<form onSubmit={handleSubmit}>
 
@@ -142,7 +160,9 @@ function App() {
 					</div>
 
 					<div className="submit-button">
-						<Button type="submit" variant="soft">Submit</Button>
+						<Tooltip content="Send Quote">
+							<Button type="submit" variant="soft">Submit</Button>
+						</Tooltip>	
 					</div>
 				</form>
 			</div>
@@ -151,7 +171,7 @@ function App() {
 			<Heading className="heading" as="h2"> <Em>Previous Quotes</Em></Heading>
 				<div className="search-field">
 					<Button variant="soft" onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
-						Sort {sortOrder === 'asc' ? 'Descending Name' : 'Ascending Name'}
+						Sort {sortOrder === 'asc' ? 'By Descending Name' : 'By Ascending Name'}
 					</Button>
 					<TextField.Root
 						placeholder="Search quotes..."
@@ -161,12 +181,25 @@ function App() {
 
 					<TextField.Root 
 						type="number"
-						placeholder="Max Age (days)"
+						placeholder="Custom Max Age (days)"
 						name="max-age"
 						id="input-max-age"
 						value={maxQuoteAge || ''}
 						onChange={(e) => setMaxQuoteAge(e.target.value ? parseInt(e.target.value) : null)}
 					/>
+
+					<select
+						id="quote-age-range"
+						name="quote-age-range"
+						value={maxQuoteAge || ''}
+						onChange={(e) => setMaxQuoteAge(e.target.value || null)}
+					>
+						<option value="">All</option>
+						<option value="7">Last Week</option>
+						<option value="30">Last Month</option>
+						<option value="365">Last Year</option>
+					</select>
+
 					<select
 						id="time-zone"
 						name="time-zone"
@@ -175,7 +208,7 @@ function App() {
 							setTimeZone(e.target.value);
 							updateTableDates(e.target.value);
 						}}
-						>
+					>
 
 						<option value="UTC">UTC</option>
 						<option value="America/New_York">Eastern Time (US & Canada)</option>

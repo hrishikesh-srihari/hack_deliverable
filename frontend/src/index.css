@@ -2,13 +2,27 @@
 	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
+.social-buttons {
+	display: flex;
+	gap: 10px;
+	float: right;
+	padding: 15px;
+}
+
+.heading-div {
+	max-width: fit-content;
+	margin-left: auto;
+  	margin-right: auto;
+	padding-top: 40px;
+	margin-bottom: 0px;	
+}
+
 .heading {
 	max-width: fit-content;
 	margin-left: auto;
   	margin-right: auto;
-	padding-top: 60px;
-	margin-bottom: 0px;
-	
+	padding-top: 50px;
+	margin-bottom: 0px;	
 }
 
 .search-quotes {
@@ -22,11 +36,19 @@
 	padding-top: 100px;
 }
 
-.submit-button {
-	padding-left: 40px;
+.header-image {
+	max-width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
 	padding-top: 30px;
+}
+
+.submit-button {
+	max-width: fit-content;
+	padding-top: 30px;
+	padding-bottom: 20px;
 	margin-left: auto; 
-	margin-right: 0;
+	margin-right: auto;
 }
 
 .name-input-box {
@@ -50,20 +72,8 @@
 
 .submission-form {
 	gap: 5px;
-	max-width: fit-content;
+	max-width: 400px;
 	margin-left: auto;
   	margin-right: auto;
 	padding-top: 75px;
-}
-
-.input-label {
-	max-width: fit-content;
-	margin-left: auto;
-  	margin-right: auto;
-	padding-top: 100px;
-
-}
-
-form {
-	padding: 10px;
 }
