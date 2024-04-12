@@ -1,7 +1,8 @@
 import "./App.css";
 import '@radix-ui/themes/styles.css';
-import { Table, Heading, Button, Tooltip, ScrollArea, Em, TextField, Link} from '@radix-ui/themes';
+import { Table, Heading, Button, Tooltip, ScrollArea, Em, TextField, DropdownMenu} from '@radix-ui/themes';
 import React, { useEffect, useState } from "react";
+
 
 /**
  * FormAndQuoteTable component
@@ -20,6 +21,27 @@ function FormAndQuoteTable() {
 	const [timeZone, setTimeZone] = useState('UTC'); // Stores the selected time zone
 
 
+    // Maps timezone values to their labels for Dropdown Menu component
+    const timeZoneLabels = {
+        'UTC': 'UTC',
+        'America/New_York': 'Eastern Time (US & Canada)',
+        'America/Los_Angeles': 'Pacific Time (US & Canada)',
+        'Europe/Berlin': 'Central European Time',
+        'Asia/Tokyo': 'Japan Standard Time'
+    };
+
+
+    // Maps max quote age values to their labels for Dropdown Menu component
+    const maxQuoteAgeLabels = {
+        'All': 'All',
+        '7': 'Last Week',
+        '30': 'Last Month',
+        '365': 'Last Year'
+      };
+
+
+
+
 	/**
 	 * updateTableDates
 	 * Updates the date displayed in the table based on the selected time zone.
@@ -36,6 +58,8 @@ function FormAndQuoteTable() {
 		  dateCell.textContent = formattedDate;
 		}
 	};
+
+
 
 	/**
 	 * Fetch quotes from the server
@@ -95,6 +119,8 @@ function FormAndQuoteTable() {
 		setQuotes(filteredQuotes);
 	}, [searchText, sortOrder, quotes]);
 
+
+
 	/**
 	 * Handle form submission
 	 * This function is called when the form is submitted.
@@ -125,7 +151,14 @@ function FormAndQuoteTable() {
 		console.error('Error submitting quote:', error);
 		}
   	};
-    
+
+
+    // Handle time zone change
+    const handleTimeZoneChange = (value) => {
+        setTimeZone(value);
+        updateTableDates(value);
+    };
+
 
     return (
         <div>
@@ -133,6 +166,8 @@ function FormAndQuoteTable() {
             {/* Submission form */}
             <div className="submission-form">
 				<form onSubmit={handleSubmit}>
+
+                    {/* Name input field */}
 					<div className="name-input-box">
 						<TextField.Root 
 							type="text"
@@ -145,7 +180,9 @@ function FormAndQuoteTable() {
 						/>
 					</div>
 
-					<div className="message-input-box">
+
+                    {/* Message input field */}
+					<div>
 						<TextField.Root
 							placeholder="Message"
 							required
@@ -157,6 +194,7 @@ function FormAndQuoteTable() {
 						/>
 					</div>
 
+                    {/* Submit button */}
 					<div className="submit-button">
 						<Tooltip content="Send Quote">
 							<Button type="submit" variant="soft">Submit</Button>
@@ -172,6 +210,8 @@ function FormAndQuoteTable() {
 
             {/* Search fields (Alphebetical sort, max age criteria, text search, and time zone selection) */}
             <div className="search-field">
+
+                    {/* Button for sorting quotes alphabetically */}
 					<Button variant="soft" onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
 						Sort {sortOrder === 'asc' ? 'By Descending Name' : 'By Ascending Name'}
 					</Button>
@@ -181,49 +221,59 @@ function FormAndQuoteTable() {
 						onChange={(e) => setSearchText(e.target.value)}
 					/>
 
+
+                    {/* Text field for setting a custom max age parameter */}
 					<TextField.Root 
 						type="number"
-						placeholder="Custom Max Age (days)"
+						placeholder="Custom Max Age"
 						name="max-age"
 						id="input-max-age"
-						value={maxQuoteAge || ''}
 						onChange={(e) => setMaxQuoteAge(e.target.value ? parseInt(e.target.value) : null)}
 					/>
 
-					<select
-						id="quote-age-range"
-						name="quote-age-range"
-						value={maxQuoteAge || ''}
-						onChange={(e) => setMaxQuoteAge(e.target.value || null)}
-					>
-						<option value="">All</option>
-						<option value="7">Last Week</option>
-						<option value="30">Last Month</option>
-						<option value="365">Last Year</option>
-					</select>
 
-					<select
-						id="time-zone"
-						name="time-zone"
-						value={timeZone}
-						onChange={(e) => {
-							setTimeZone(e.target.value);
-							updateTableDates(e.target.value);
-						}}
-					>
-						<option value="UTC">UTC</option>
-						<option value="America/New_York">Eastern Time (US & Canada)</option>
-						<option value="America/Los_Angeles">Pacific Time (US & Canada)</option>
-						<option value="Europe/Berlin">Central European Time</option>
-						<option value="Asia/Tokyo">Japan Standard Time</option>
-					</select>
+                    {/* Dropdown menu for setting a time interval for quote retrieval */}
+                    <DropdownMenu.Root>
+                        <DropdownMenu.Trigger>
+                            <Button variant="soft">
+                                {maxQuoteAgeLabels[maxQuoteAge] || 'All'}
+                            <DropdownMenu.TriggerIcon />
+                            </Button>
+                        </DropdownMenu.Trigger>
+                        <DropdownMenu.Content>
+                            <DropdownMenu.Item onClick={() => setMaxQuoteAge("All" || {maxQuoteAge})}>{maxQuoteAgeLabels["All"]}</DropdownMenu.Item>
+                            <DropdownMenu.Item onClick={() => setMaxQuoteAge("7" || {maxQuoteAge})}>{maxQuoteAgeLabels["7"]}</DropdownMenu.Item>
+                            <DropdownMenu.Item onClick={() => setMaxQuoteAge("30" || {maxQuoteAge})}>{maxQuoteAgeLabels["30"]}</DropdownMenu.Item>
+                            <DropdownMenu.Item onClick={() => setMaxQuoteAge("365" || {maxQuoteAge})}>{maxQuoteAgeLabels["365"]}</DropdownMenu.Item>
+                        </DropdownMenu.Content>
+                    </DropdownMenu.Root>
+
+                    
+                    {/* Dropdown menu for setting a value for time zone on quote table */}
+                    <DropdownMenu.Root>
+                        <DropdownMenu.Trigger>
+                            <Button variant="soft">
+                                {timeZoneLabels[timeZone] || timeZone}
+                            <DropdownMenu.TriggerIcon />
+                            </Button>
+                        </DropdownMenu.Trigger>
+                        <DropdownMenu.Content>
+                            <DropdownMenu.Item onClick={() => handleTimeZoneChange('UTC')}>UTC</DropdownMenu.Item>
+                            <DropdownMenu.Item onClick={() => handleTimeZoneChange('America/New_York')}>Eastern Time (US & Canada)</DropdownMenu.Item>
+                            <DropdownMenu.Item onClick={() => handleTimeZoneChange('America/Los_Angeles')}>Pacific Time (US & Canada)</DropdownMenu.Item>
+                            <DropdownMenu.Item onClick={() => handleTimeZoneChange('Europe/Berlin')}>Central European Time</DropdownMenu.Item>
+                            <DropdownMenu.Item onClick={() => handleTimeZoneChange('Asia/Tokyo')}>Japan Standard Time</DropdownMenu.Item>
+                        </DropdownMenu.Content>
+                    </DropdownMenu.Root>
 			</div>
 			
 
 			{/* Quote Table */}
-			<div className="quotes">
+			<div className="quote-table">
 				<ScrollArea type="always" scrollbars="vertical" style={{ height: 500 }}>
-					<Table.Root size="3">
+
+                    {/* Table with values for qutoes */}
+					<Table.Root size="3" variant="ghost" layout={"auto"}>
 						<Table.Header>
 							<Table.Row>
 								<Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>

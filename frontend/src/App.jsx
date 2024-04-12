@@ -13,6 +13,8 @@ function App() {
 		<div className="App">
 			<SocialButtons />
 
+
+			{/* Quotebook Image */}
 			<div className="header-image">
 				<img 
 					src="/Quotebook.png"
@@ -20,7 +22,9 @@ function App() {
 				/>
 			</div>
 
-			<Heading className="heading-div" size="7" color="indigo" as="h1">
+
+			{/* Framer motion "Hack at UCI Deliverable" header */}
+			<Heading className="heading" size="7" color="indigo" as="h1">
 				{headerTitle.map((word, index) => (
 				<motion.span
 					key={index}
@@ -32,6 +36,8 @@ function App() {
 				</motion.span>
 				))}
 			</Heading>
+
+
 			<FormAndQuoteTable />
 		</div>
 	);

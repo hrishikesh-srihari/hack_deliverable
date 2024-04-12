@@ -8,15 +8,7 @@
 	float: right;
 	padding: 15px;
 }
-
-.heading-div {
-	max-width: fit-content;
-	margin-left: auto;
-  	margin-right: auto;
-	padding-top: 40px;
-	margin-bottom: 0px;	
-}
-
+  
 .heading {
 	max-width: fit-content;
 	margin-left: auto;
@@ -29,7 +21,7 @@
 	padding-top: 50px;
 }
 
-.quotes {
+.quote-table {
 	max-width: 1200px;
 	margin-left: auto;
   	margin-right: auto;
