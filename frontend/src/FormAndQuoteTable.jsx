@@ -3,30 +3,45 @@ import '@radix-ui/themes/styles.css';
 import { Table, Heading, Button, Tooltip, ScrollArea, Em, TextField, Link} from '@radix-ui/themes';
 import React, { useEffect, useState } from "react";
 
+/**
+ * FormAndQuoteTable component
+ * This component handles the submission of quotes and the display of the quote table.
+ * It includes features for searching, sorting, and filtering the quotes based on various criteria.
+ */
+
 function FormAndQuoteTable() {
-	const [quotes, setQuotes] = useState([]);
-	const [name, setName] = useState('');
-	const [message, setMessage] = useState('');
-	const [maxQuoteAge, setMaxQuoteAge] = useState(null);
-	const [sortOrder, setSortOrder] = useState('asc');
-	const [searchText, setSearchText] = useState('');
-	const [timeZone, setTimeZone] = useState('UTC');
+	// State variables
+	const [quotes, setQuotes] = useState([]); // Stores the list of quotes
+	const [name, setName] = useState(''); // Stores the name input
+	const [message, setMessage] = useState(''); // Stores the message input
+	const [maxQuoteAge, setMaxQuoteAge] = useState(null); // Stores the maximum quote age filter
+	const [sortOrder, setSortOrder] = useState('asc'); // Stores the sort order (ascending or descending)
+	const [searchText, setSearchText] = useState(''); // Stores the search text
+	const [timeZone, setTimeZone] = useState('UTC'); // Stores the selected time zone
 
 
+	/**
+	 * updateTableDates
+	 * Updates the date displayed in the table based on the selected time zone.
+	 * @param {string} timeZone - The time zone to be used for date formatting.
+	 */
 	const updateTableDates = (timeZone) => {
 		const tableRows = table.getElementsByTagName('tr');
-	
 		for (let i = 1; i < tableRows.length; i++) {
 		  const dateCell = tableRows[i].getElementsByTagName('td')[2];
 		  const dateString = dateCell.textContent;
 		  const date = new Date(dateString);
-	
 		  const options = { timeZone: timeZone, timeZoneName: 'short' };
 		  const formattedDate = date.toLocaleString('en-US', options);
 		  dateCell.textContent = formattedDate;
 		}
 	};
 
+	/**
+	 * Fetch quotes from the server
+	 * This effect is triggered when the component mounts or when the filters change.
+	 * It fetches the quotes from the server based on the current filters.
+	 */
 	useEffect(() => {
 		const fetchQuotes = async () => {
 			try {
@@ -52,6 +67,11 @@ function FormAndQuoteTable() {
 
 
 
+	/**
+	 * Filter and sort the quotes
+	 * This effect is triggered when the search text or sort order changes.
+	 * It filters the quotes based on the search text and sorts them based on the sort order.
+	 */
 	useEffect(() => {
 		const filterQuotes = () => {
 		if (!searchText) {
@@ -75,8 +95,12 @@ function FormAndQuoteTable() {
 		setQuotes(filteredQuotes);
 	}, [searchText, sortOrder, quotes]);
 
-
-
+	/**
+	 * Handle form submission
+	 * This function is called when the form is submitted.
+	 * It sends the new quote to the server and updates the list of quotes.
+	 * @param {Event} e - The form submission event.
+	 */
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
@@ -101,9 +125,12 @@ function FormAndQuoteTable() {
 		console.error('Error submitting quote:', error);
 		}
   	};
+    
 
     return (
         <div>
+
+            {/* Submission form */}
             <div className="submission-form">
 				<form onSubmit={handleSubmit}>
 					<div className="name-input-box">
@@ -139,7 +166,11 @@ function FormAndQuoteTable() {
 			</div>
 
 
+            {/* Previous quotes section */}
             <Heading className="heading" as="h2"> <Em>Previous Quotes</Em></Heading>
+
+
+            {/* Search fields (Alphebetical sort, max age criteria, text search, and time zone selection) */}
             <div className="search-field">
 					<Button variant="soft" onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
 						Sort {sortOrder === 'asc' ? 'By Descending Name' : 'By Ascending Name'}
@@ -180,7 +211,6 @@ function FormAndQuoteTable() {
 							updateTableDates(e.target.value);
 						}}
 					>
-
 						<option value="UTC">UTC</option>
 						<option value="America/New_York">Eastern Time (US & Canada)</option>
 						<option value="America/Los_Angeles">Pacific Time (US & Canada)</option>
@@ -190,6 +220,7 @@ function FormAndQuoteTable() {
 			</div>
 			
 
+			{/* Quote Table */}
 			<div className="quotes">
 				<ScrollArea type="always" scrollbars="vertical" style={{ height: 500 }}>
 					<Table.Root size="3">
