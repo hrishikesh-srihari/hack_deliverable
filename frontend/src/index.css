@@ -17,6 +17,18 @@
 	margin-bottom: 0px;	
 }
 
+.timezone-dropdown-trigger {
+	width: 240px;
+}
+
+.quoteage-dropdown-trigger {
+	width: 120px;
+}
+
+.sorting-button {
+	width: 200px;
+}
+
 .search-quotes {
 	padding-top: 50px;
 }
@@ -46,10 +58,6 @@
 	padding-bottom: 20px;
 }
 
-.sort-button {
-	padding-bottom: 20px;
-	padding-top: 10px;
-}
 
 .search-field {
 	display: flex;
